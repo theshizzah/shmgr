@@ -7,22 +7,40 @@ func usage() {
 	os.Exit(1)
 }
 
+func doInit() {
+	println("initializing shellmgr!")
+	if err := os.Mkdir(os.Getenv("HOME")+"/.shellmgr", os.ModePerm); err != nil {
+		println("error creating directory: ", err.Error())
+	}
+}
+
+func make(name string) {
+	checkName(name)
+	println("making env: ", name)
+}
+
+func use(name string) {
+	checkName(name)
+	println("using env: ", name)
+}
+
+func checkName(name string) {
+	if name == "" {
+		usage()
+	}
+}
+
 func main() {
 	println("welcome to shellmgr!")
 
-	if os.Args[1] == "init" {
-		println("initializing shellmgr!")
-		if err := os.Mkdir(os.Getenv("HOME")+"/.shellmgr", os.ModePerm); err != nil {
-			println("error creating directory: ", err.Error())
-		}
-	} else if os.Args[1] == "env" {
-		if "" == os.Args[2] {
-			usage()
-		}
-		print("creating shell environment named ", os.Args[2])
-	} else if os.Args[2] == "use" {
-		if "" == os.Args[2] {
-			usage()
-		}
+	switch arg := os.Args[1]; arg {
+	case "init":
+		doInit()
+	case "env":
+		make(os.Args[2])
+	case "use":
+		use(os.Args[2])
+	default:
+		usage()
 	}
 }
