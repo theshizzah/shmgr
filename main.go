@@ -1,6 +1,11 @@
 package main
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+)
+
+var baseDir = filepath.Join(os.Getenv("HOME"), ".shellmgr")
 
 func usage() {
 	println("./shellmgr init | env ENV_NAME | use ENV_NAME")
@@ -9,7 +14,7 @@ func usage() {
 
 func doInit() {
 	println("initializing shellmgr!")
-	if err := os.Mkdir(os.Getenv("HOME")+"/.shellmgr", os.ModePerm); err != nil {
+	if err := os.Mkdir(baseDir, os.ModePerm); err != nil {
 		println("error creating directory: ", err.Error())
 	}
 }
