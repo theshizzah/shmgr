@@ -3,6 +3,8 @@ package main
 import (
 	"os"
 	"path/filepath"
+
+	profilemanager "github.com/theshizzah/shmgr/profile/manager"
 )
 
 var baseDir = filepath.Join(os.Getenv("HOME"), ".shellmgr")
@@ -20,8 +22,13 @@ func doInit() {
 }
 
 func make(name string) {
-	checkName(name)
 	println("making env: ", name)
+	checkName(name)
+	profilePath := filepath.Join(baseDir, name)
+	if err := os.Mkdir(profilePath, os.ModePerm); err != nil {
+		println("error creating subdir: ", err.Error())
+	}
+	_ = profilemanager.New(profilePath)
 }
 
 func use(name string) {
